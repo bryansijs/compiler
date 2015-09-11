@@ -11,14 +11,14 @@ public class Main {
 
 /*
  VARIABELE
-lade x = “hoi”
+lade x = "hoi"
 
 CONDITIE
 
-als (x == “hoi”){
+als (x == "hoi"){
 	
 }
-alsanders{
+alsanders( y == "hoi"){
 
 }
 anders{
