@@ -1,60 +1,61 @@
 package compiler;
 
 public class Node {
-    // reference to the next node in the chain,
-    // or null if there isn't one.
-    Node next;
-    
-    //reference to the previous node in the chain
-    //or null if there isn't one.
-    Node previous;
-    
-    // data carried by this node.
-    // could be of any type you need.
-    Object data;
+	private Node next;
+	private Node previous;
+	private NodeType Token;
+	private Object value;
+	private int ruleNumber;
+	private int positionInRule;
+	private int Level;
+	private int partner;
 
-    // Node constructor
-    // Makes and empty node. No next or previous.
-    public Node(Object dataValue) {
-        next = null;
-        previous = null;
-        data = dataValue;
-    }
+	public Node(Node next, Node previous, NodeType token, String value,
+			int ruleNumber, int positionInRule, int level, int partner) {
+		super();
+		this.next = next;
+		this.previous = previous;
+		Token = token;
+		this.value = value;
+		this.ruleNumber = ruleNumber;
+		this.positionInRule = positionInRule;
+		Level = level;
+		this.partner = partner;
+	}
 
-    // another Node constructor if we want to
-    // specify the node to point to or points from.
-    // you can send null on this;
-    public Node(Object dataValue, Node nextValue, Node previousValue) {
-        next = nextValue;
-        previous = previousValue;
-        data = dataValue;
-    }
+	public Node getNext() {
+		return next;
+	}
 
-    // these methods should be self-explanatory
-    public Object getData() {
-        return data;
-    }
+	public void setNext(Node node) {
+		this.next = node;
+	}
 
-    public void setData(Object dataValue) {
-        data = dataValue;
-    }
+	public Node getPrevious() {
+		return previous;
+	}
 
-    public Node getNext() {
-        return next;
-    }
+	public NodeType getToken() {
+		return Token;
+	}
 
-    public Node getPrevious()
-    {
-    	return previous;
-    }
-    
-    public void setNext(Node nextValue) {
-        next = nextValue;
-    }
-    
-    public void setPrevious(Node previousValue)
-    {
-    	previous = previousValue;
-    }
+	public Object getValue() {
+		return value;
+	}
 
+	public int getRuleNumber() {
+		return ruleNumber;
+	}
+
+	public int getPositionInRule() {
+		return positionInRule;
+	}
+
+	public int getLevel() {
+		return Level;
+	}
+
+	public int getPartner() {
+		return partner;
+	}
 }

@@ -1,35 +1,28 @@
 package compiler;
 
 public class linked_list {
-	  
+
 	private Node head;
 	private int listCount;
-	 
+
 	// LinkedList constructor
 	public linked_list() {
-	// this is an empty list, so the reference to the head node
-	// is set to a new node with no data
-		head = new Node(null);
+		head = null;
 		listCount = 0;
 	}
-	 
-	
-	 public void add(Object data)
-	    // appends the specified element to the end of this list.
-	    {
-	        Node node = new Node(data);
-	        Node currentNode = head;
-	        // starting at the head node, crawl to the end of the list
-	        while (currentNode.getNext() != null) {
-	        	currentNode = currentNode.getNext();
-	        }
-	        // the last node's "next" reference set to our new node
-	        currentNode.setNext(node);
-	        listCount++;// increment the number of elements variable
-	    }
-	 
+
+	public void add(NodeType token, String value,
+			int ruleNumber, int positionInRule, int level, int partner) {
+		if (head == null) {
+			//First item in List
+			head = new Node(null,null,token,value,ruleNumber,positionInRule,level,partner);
+			listCount++;
+		} else {
+			//Not the first.
+			Node node = new Node(null, head, token, value, ruleNumber,positionInRule, level, partner);//Prev
+			head.setNext(node);//Next
+			head = node;
+			listCount++;
+		}
+	}
 }
-
-
-
-

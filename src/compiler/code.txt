@@ -1,0 +1,25 @@
+lade x = "hoi" ;
+lade y = 3 ;
+
+als ( x == "hoi" ) {
+	y ++ ;
+}
+alsanders ( y == "hoii" ) {
+	
+}
+anders {
+
+} 
+
+zolang ( x = "hoi" ) {
+	y += 1 ;
+}
+
+voor {
+}
+
+gelul 
+	dit is commentaar
+eindgelul 
+
+lees: dit is een enkele regel.
