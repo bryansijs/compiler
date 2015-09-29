@@ -1,18 +1,18 @@
-lade x = "hoi" ;
+lade x = *hoi* ;
 lade y = 3 ;
 
-als ( x == "hoi" ) {
+als ( x == *hoi* ) {
 	y ++ ;
 }
-alsanders ( y == "hoii" ) {
+alsanders ( y == *hoii* ) {
 	
 }
 anders {
 
 } 
 
-zolang ( x = "hoi" ) {
-	y += 1 ;
+zolang ( x == *hoi* ) {
+	y ++ ;
 }
 
 voor {
@@ -22,4 +22,4 @@ gelul
 	dit is commentaar
 eindgelul 
 
-lees: dit is een enkele regel.
+lees dit is een enkele regel.
