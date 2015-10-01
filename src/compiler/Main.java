@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Stack;
+import compiler.nodes.*;
 
 public class Main {
 
@@ -19,7 +20,7 @@ public class Main {
 	private static String identifierRegex;
 	private static int level;
 
-	public static void main(String[] args) {
+	public static void main(String[] args) {		
 		// INIT
 		int lineNumber = 0;
 		level = 0;
@@ -72,7 +73,7 @@ public class Main {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+		System.out.println("good syntax!");
 //		Node node = list.getFirst();
 //		for (int i = 0; i < list.getListCount(); i++) {
 //			System.out.println(node.getValue() + Integer.toString(node.getPartner()));

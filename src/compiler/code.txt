@@ -1,4 +1,4 @@
-lade x = *hoi* ;}
+lade x = *hoi* ; 
 lade y = 3 ;
 
 als ( x == *hoi* ) {
