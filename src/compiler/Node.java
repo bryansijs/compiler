@@ -7,11 +7,12 @@ public class Node {
 	private Object value;
 	private int ruleNumber;
 	private int positionInRule;
+	public 	int positionInList;
 	private int Level;
 	private int partner;
 
 	public Node(Node next, Node previous, NodeType token, String value,
-			int ruleNumber, int positionInRule, int level, int partner) {
+			int ruleNumber, int positionInRule, int level, int partner, int positionInList) {
 		super();
 		this.next = next;
 		this.previous = previous;
@@ -21,6 +22,7 @@ public class Node {
 		this.positionInRule = positionInRule;
 		Level = level;
 		this.partner = partner;
+		this.positionInList = positionInList;
 	}
 
 	public Node getNext() {
@@ -57,5 +59,9 @@ public class Node {
 
 	public int getPartner() {
 		return partner;
+	}
+	
+	public void setPartner(int number){
+		this.partner = number;
 	}
 }

@@ -11,25 +11,28 @@ public class Main {
 
 	private static linked_list list;
 	private static HashMap<String, NodeType> map;
-	private static Stack<NodeType> stack;
+	private static Stack<Node> stack;
 
 	private static boolean readContent;
 	private static String numberRegex;
 	private static String stringRegex;
+	private static String identifierRegex;
+	private static int level;
 
 	public static void main(String[] args) {
 		// INIT
 		int lineNumber = 0;
-		int level = 0;
+		level = 0;
 
 		list = new linked_list();
 		readContent = true;
 		map = new HashMap<String, NodeType>();
-		stack = new Stack<NodeType>();
+		stack = new Stack<Node>();
 
 		// Settings
 		numberRegex = "[0-9]+";
 		stringRegex = "^\\*\\w*\\*+";
+		identifierRegex = "[A-Za-z]*";
 
 		fillHash(map);
 		try (BufferedReader br = new BufferedReader(new FileReader("src/compiler/code.txt"))) {
@@ -47,14 +50,14 @@ public class Main {
 					if (readContent) {
 						if (map.containsKey(part)) {
 							// known element
-							handleOpenAndCloseTags(part);
-
+							
 							// Single row comment
 							if (part.equals("lees")) {
 								break;
 							}
-
 							list.add(map.get(part), part, lineNumber, node - 1, level, 0);
+							handleOpenAndCloseTags(part,list.getHead(),lineNumber);
+							
 						} else {
 							// Unknown element
 							categorizeUnknownElement(part, lineNumber, node, level);
@@ -69,6 +72,12 @@ public class Main {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+//		Node node = list.getFirst();
+//		for (int i = 0; i < list.getListCount(); i++) {
+//			System.out.println(node.getValue() + Integer.toString(node.getPartner()));
+//			node = node.getNext();
+//		}
 	}
 
 	private static void categorizeUnknownElement(String part, int lineNumber, int node, int level) {
@@ -80,22 +89,45 @@ public class Main {
 		// START WITH *?
 		else if (part.matches(stringRegex)) {
 			list.add(NodeType.STRING, part, lineNumber, node - 1, level, 0);
-		} else {
+		} 
+		
+		else if(part.matches(identifierRegex)){
 			// IDENTIFIER
 			list.add(NodeType.IDENTIFIER, part, lineNumber, node - 1, level, 0);
 		}
+		else{
+			throw new RuntimeException("Onbekend teken gevonden: "+ part +  " op regel:" + lineNumber);
+		}
 	}
 
-	private static void handleOpenAndCloseTags(String part) {
+	private static void handleOpenAndCloseTags(String part, Node newNode, int lineNumber) {
+		
 		NodeType type = map.get(part);
 		if (type == NodeType.BRACKETSOPEN || type == NodeType.ELLIPSISOPEN)
-			stack.push(type);
+		{
+			stack.push(newNode);
+			level++;
+		}
 		if (type == NodeType.BRACKETSCLOSE)
-			if (stack.pop() != NodeType.BRACKETSOPEN)
-				throw new RuntimeException("Geen opentag gevonden");
+			if (stack.isEmpty() || stack.peek().getToken() != NodeType.BRACKETSOPEN)
+				throw new RuntimeException("Geen opentag gevonden bij de sluittag op regel:" + lineNumber);
+			else
+			{
+				Node oldNode = stack.pop();
+				newNode.setPartner(oldNode.positionInList);
+				oldNode.setPartner(newNode.positionInList);
+				level--;
+			}
 		if (type == NodeType.ELLIPSISCLOSED)
-			if (stack.pop() != NodeType.ELLIPSISOPEN)
-				throw new RuntimeException("Geen opentag gevonden");
+			if (stack.isEmpty() || stack.peek().getToken() != NodeType.ELLIPSISOPEN)
+				throw new RuntimeException("Geen opentag gevonden bij de sluittag op regel:" + lineNumber);
+			else
+			{
+				Node oldNode = stack.pop();
+				newNode.setPartner(oldNode.positionInList);
+				oldNode.setPartner(newNode.positionInList);
+				level--;
+			}
 	}
 
 	private static void isLongComment(String part) {

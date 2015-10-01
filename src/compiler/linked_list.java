@@ -3,6 +3,7 @@ package compiler;
 public class linked_list {
 
 	private Node head;
+	private Node first;
 	private int listCount;
 
 	// LinkedList constructor
@@ -15,14 +16,28 @@ public class linked_list {
 			int ruleNumber, int positionInRule, int level, int partner) {
 		if (head == null) {
 			//First item in List
-			head = new Node(null,null,token,value,ruleNumber,positionInRule,level,partner);
+			Node node = new Node(null,null,token,value,ruleNumber,positionInRule,level,partner,listCount);
+			head = node;
+			first = node;
 			listCount++;
 		} else {
 			//Not the first.
-			Node node = new Node(null, head, token, value, ruleNumber,positionInRule, level, partner);//Prev
+			Node node = new Node(null, head, token, value, ruleNumber,positionInRule, level, partner,listCount);//Prev
 			head.setNext(node);//Next
 			head = node;
 			listCount++;
 		}
+	}
+	
+	public Node getHead(){
+		return head;
+	}
+	
+	public Node getFirst(){
+		return first;
+	}
+	
+	public int getListCount(){
+		return this.listCount;
 	}
 }
