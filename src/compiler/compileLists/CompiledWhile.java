@@ -3,15 +3,15 @@ package compiler.compileLists;
 import java.util.ArrayList;
 
 import compiler.CompileList;
-import compiler.Node;
-import compiler.NodeType;
+import compiler.tokenizer.Node;
+import compiler.tokenizer.NodeType;
 import compiler.nodes.Action;
 import compiler.nodes.ConditionalJump;
 import compiler.nodes.DoNothing;
 import compiler.nodes.Jump;
 
 
-public class CompiledWhile extends Compiler{
+public class CompiledWhile extends AbstractCompiler{
 	
 	private CompileList compiledStatement;
     private CompileList condition;
@@ -40,7 +40,7 @@ public class CompiledWhile extends Compiler{
         conditionalJumpNode.setNextFalse(compiledStatement.getHead());
 	}
     
-    public CompileList compile(Node currentToken, Compiler compiler)
+    public CompileList compile(Node currentToken, AbstractCompiler compiler)
     {
         int whileLevel = currentToken.positionInList;
         

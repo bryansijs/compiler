@@ -1,13 +1,13 @@
 package compiler.compileLists;
 
 import compiler.CompileList;
-import compiler.Node;
+import compiler.tokenizer.Node;
 import compiler.nodes.Action;
 import compiler.nodes.ConditionalJump;
 import compiler.nodes.DoNothing;
 import compiler.nodes.Jump;
 
-public class CompileDoWhile extends Compiler {
+public class CompileDoWhile extends AbstractCompiler {
 
 	private CompileList compiledStatement;
     private CompileList condition;
@@ -34,7 +34,7 @@ public class CompileDoWhile extends Compiler {
 	}
 
 	@Override
-	public CompileList compile(Node currentToken, Compiler compiler) {
+	public CompileList compile(Node currentToken, AbstractCompiler compiler) {
 		// TODO Auto-generated method stub
 		return null;
 	}

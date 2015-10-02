@@ -1,0 +1,15 @@
+lade x = 3 + 6 ;
+
+zolang ( x != 0 ) {
+	x = x - 1 ;
+	print ( x ) ;
+}
+
+lade y = 4 ;
+
+als ( y == 0 ) {
+	print ( y + 3 ) ;
+}
+anders {
+	print ( y - 2 ) ;
+}

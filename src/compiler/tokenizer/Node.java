@@ -1,4 +1,5 @@
-package compiler;
+package compiler.tokenizer;
+
 
 public class Node {
 	private Node next;

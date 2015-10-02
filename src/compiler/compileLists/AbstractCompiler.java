@@ -1,20 +1,20 @@
 package compiler.compileLists;
 
 import compiler.CompileList;
-import compiler.Node;
+import compiler.tokenizer.Node;
 import compiler.nodes.Action;
 
-public abstract class Compiler {
+public abstract class AbstractCompiler {
 	
 	private CompileList compileList;
 	private Action first;
 	private Action last;
 
-	public Compiler() {
+	public AbstractCompiler() {
 		compileList = new CompileList();
 	}
 
-	public Compiler(Action first, Action last) {
+	public AbstractCompiler(Action first, Action last) {
 		this.first = first;
 		this.last = last;
 	}
@@ -35,5 +35,5 @@ public abstract class Compiler {
 		this.last = last;
 	}
 	
-	public abstract CompileList compile(Node currentToken, Compiler compiler);
+	public abstract CompileList compile(Node currentToken, AbstractCompiler compiler);
 }

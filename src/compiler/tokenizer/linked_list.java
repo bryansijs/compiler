@@ -1,4 +1,6 @@
-package compiler;
+package compiler.tokenizer;
+
+
 
 public class linked_list {
 
