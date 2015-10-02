@@ -1,6 +1,5 @@
-package compiler;
+package compiler.nodes;
 
-import compiler.nodes.Action;
 
 public class Jump extends Action{
 
@@ -9,5 +8,7 @@ public class Jump extends Action{
 		// TODO Auto-generated constructor stub
 	}
 	
-
+	public Jump() {
+		// TODO Auto-generated constructor stub
+	}
 }

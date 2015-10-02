@@ -4,6 +4,10 @@ public abstract class Action {
 	private Action next;
 	private Action previous;
 	
+	public Action(){
+		
+	}
+	
 	public Action(Action next, Action previous){
 		this.next = next;
 		this.previous = previous;

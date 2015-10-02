@@ -6,7 +6,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Stack;
-import compiler.nodes.*;
 
 public class Main {
 
@@ -102,7 +101,7 @@ public class Main {
 	}
 
 	private static void handleOpenAndCloseTags(String part, Node newNode, int lineNumber) {
-		
+		//TODO: if else.
 		NodeType type = map.get(part);
 		if (type == NodeType.BRACKETSOPEN || type == NodeType.ELLIPSISOPEN)
 		{
@@ -159,5 +158,4 @@ public class Main {
 		map.put("=", NodeType.ASSIGN);
 		map.put("voor", NodeType.FOR);
 	}
-
 }
