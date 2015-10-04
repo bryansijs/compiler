@@ -1,42 +1,97 @@
 package compiler.compileLists;
 
+import java.util.ArrayList;
+
 import compiler.CompileList;
 import compiler.nodes.Action;
 import compiler.nodes.ConditionalJump;
 import compiler.nodes.DoNothing;
 import compiler.nodes.Jump;
+import compiler.tokenizer.Node;
+import compiler.tokenizer.NodeType;
 
 public class CompileIfElse extends CompileIfGeneral{
 	
 	private CompileList compiledStatement;
     private CompileList condition;
     private CompileList statement;
-    private CompileList statement2;
+    private CompileList compiledBodyPart;
+    
 	
     // LinkedList constructor
     public CompileIfElse() {
     	
-		compiledStatement = new CompileList();
+    	compiledStatement = new CompileList();
         condition = new CompileList();
         statement = new CompileList();
-        statement2 = new CompileList();
-        
-        Action jumpNode = new Jump();
+
         ConditionalJump conditionalJumpNode = new ConditionalJump();
-        DoNothing elseNothing = new DoNothing();
         
         compiledStatement.add(new DoNothing());
         compiledStatement.add(condition);
         compiledStatement.add(conditionalJumpNode);
         compiledStatement.add(new DoNothing());
         compiledStatement.add(statement);
-        compiledStatement.add(jumpNode);
-        compiledStatement.add(elseNothing);
-        compiledStatement.add(statement2);
         compiledStatement.add(new DoNothing());
 
-        jumpNode.setNext(compiledStatement.getHead());
         conditionalJumpNode.setNextTrue(conditionalJumpNode.getNext());
-        conditionalJumpNode.setNextFalse(elseNothing);
+        conditionalJumpNode.setNextFalse(compiledStatement.getHead());
+	}
+    
+    public CompileList compile(Node currentToken, AbstractCompiler compiler) {
+    	int whileLevel = currentToken.getLevel();
+    	
+    	ArrayList<NodeType> expected = new ArrayList<NodeType>();
+        
+        expected.add(NodeType.IF);
+        expected.add(NodeType.ELLIPSISOPEN);
+        expected.add(NodeType.ANY); 
+        expected.add(NodeType.ELLIPSISCLOSED);
+        expected.add(NodeType.BRACKETSOPEN);
+        expected.add(NodeType.ANY);
+        expected.add(NodeType.BRACKETSCLOSE);
+        
+        for(NodeType type: expected)
+        {
+        	if (currentToken.getLevel() == whileLevel)
+        	{
+        		if (currentToken.getToken() != type)
+                {
+        				throw new RuntimeException("Unexpected end of statement, expected: " + type.toString());
+                }
+        		else{
+        			currentToken = currentToken.getNext();
+        		}
+        	}
+        	else
+            {
+        		if (condition.getListCount() == 2) // We komen eerst de conditie tegen, deze vullen we daarom eerst.
+        		{
+                   CompileCondition compiledCondition = new CompileCondition();
+                   condition.add(compiledCondition.compile(currentToken, null));
+                   
+                   while(currentToken.getToken() != NodeType.ELLIPSISCLOSED) // Go until end statement
+                   {
+                	   currentToken = currentToken.getNext();
+                   }
+                }
+                else
+                { // Body
+                	CompileListFactory factory = new CompileListFactory();
+                	CompileList body = new CompileList();
+                    while(currentToken.getLevel() > whileLevel) // Zolang we in de body zitten mag de factory hiermee aan de slag. Dit is niet onze zaak.
+                    {
+                        compiledBodyPart = factory.getCompileList(currentToken);
+                        body.add(compiledBodyPart);
+                        while(currentToken.getToken() != NodeType.SEMICOLON) // Go until end statement
+                        {
+                     	   currentToken = currentToken.getNext();
+                        }
+                        currentToken = currentToken.getNext();
+                    };
+            	}
+            }
+        }        
+        return compiledStatement;
 	}
 }

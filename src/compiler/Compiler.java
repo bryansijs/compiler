@@ -9,38 +9,58 @@ public class Compiler {
 
 	private CompileList list;
 	private CompileList sublist;
+	private Node node;
 
 	public Compiler() {
 		list = new CompileList();
 	}
 
 	public CompileList getCompiledListFromTokenList(linked_list tokenList){
-		Node node = tokenList.getFirst();
+		node = tokenList.getFirst();
 		
 		CompileListFactory factory = new CompileListFactory();
 		
-
+		boolean endText = false;
 		do{
 			sublist = factory.getCompileList(node);
 			list.add(sublist);
-			skipToNextItem(node);
+			endText = skipToNextItem();
 		}
-		while(node != null);
+		while(!endText);
 
 		return list;
 	}
 	
-	private void skipToNextItem(Node node){
+	private boolean skipToNextItem(){
 		//skip to next item
-		if(node.getToken() == NodeType.VARIABELE){
+		if(node.getToken() == NodeType.VARIABELE || node.getToken() == NodeType.FUNCTION){
+			//Go until ;
 			boolean found = false;
-			while(found){
+			while(!found){
 				if(node.getToken() == NodeType.SEMICOLON)
 					found = true;
 				else
 					node = node.getNext();
 			}
 		}
+		else if(node.getToken() == NodeType.IF || node.getToken() == NodeType.ELSE || node.getToken() == NodeType.WHILE){
+			//Go until }
+			boolean found = false;
+			while(!found){
+				if(node.getToken() == NodeType.BRACKETSCLOSE)
+					found = true;
+				else
+					node = node.getNext();
+			}
+		}
 		node = node.getNext();
+		if(node == null)
+			return true;
+		
+		if(node.getToken() == NodeType.ELSE){
+			return skipToNextItem();
+		}
+		
+		return false;
 	}
 }

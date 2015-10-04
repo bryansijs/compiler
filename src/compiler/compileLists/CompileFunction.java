@@ -26,15 +26,13 @@ public class CompileFunction extends AbstractCompiler{
         ConditionalJump conditionalJumpNode = new ConditionalJump();
         DoNothing elseNothing = new DoNothing();
         
-        compiledStatement.add(new DoNothing());
         compiledStatement.add(condition);
-        compiledStatement.add(conditionalJumpNode);
+        compiledStatement.insertBeforeLast(conditionalJumpNode);
         compiledStatement.add(new DoNothing());
         compiledStatement.add(statement);
-        compiledStatement.add(jumpNode);
-        compiledStatement.add(elseNothing);
+        compiledStatement.insertBeforeLast(jumpNode);
+        compiledStatement.insertBeforeLast(elseNothing);
         compiledStatement.add(statement2);
-        compiledStatement.add(new DoNothing());
 
         jumpNode.setNext(compiledStatement.getHead());
         conditionalJumpNode.setNextTrue(conditionalJumpNode.getNext());
@@ -44,7 +42,7 @@ public class CompileFunction extends AbstractCompiler{
 	@Override
 	public CompileList compile(Node currentToken, AbstractCompiler compiler) {
 		// TODO Auto-generated method stub
-		return null;
+		return compiledStatement;
 	}
 
 }

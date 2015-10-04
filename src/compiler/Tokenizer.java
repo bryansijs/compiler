@@ -63,6 +63,7 @@ public class Tokenizer {
 							if (part.equals("lees")) {
 								break;
 							}
+							handleCloseTagLevel(part); // Level lower for close tags
 							list.add(map.get(part), part, lineNumber, node - 1, level, 0);
 							handleOpenAndCloseTags(part,list.getHead(),lineNumber);
 							
@@ -84,7 +85,7 @@ public class Tokenizer {
 		return this.list;
 	}
 	
-	private static void categorizeUnknownElement(String part, int lineNumber, int node, int level) {
+	private void categorizeUnknownElement(String part, int lineNumber, int node, int level) {
 
 		// Numbers
 		if (part.matches(numberRegex)) {
@@ -97,20 +98,32 @@ public class Tokenizer {
 		
 		else if(part.matches(identifierRegex)){
 			// IDENTIFIER
-			list.add(NodeType.IDENTIFIER, part, lineNumber, node - 1, level, 0);
+			if(!part.equals(""))	
+				list.add(NodeType.IDENTIFIER, part, lineNumber, node - 1, level, 0);
 		}
 		else{
 			throw new RuntimeException("Onbekend teken gevonden: "+ part +  " op regel:" + lineNumber);
 		}
 	}
+	
+	private void handleCloseTagLevel(String part){
+		if (part.equals("}")||part.equals(")"))
+		{
+			level = level -1;
+		}
+	}
 
-	private static void handleOpenAndCloseTags(String part, Node newNode, int lineNumber) {
+	private void handleOpenAndCloseTags(String part, Node newNode, int lineNumber) {
 		NodeType type = map.get(part);
-		if (type == NodeType.BRACKETSOPEN || type == NodeType.ELLIPSISOPEN || type == NodeType.IF)
+		if (type == NodeType.BRACKETSOPEN || type == NodeType.ELLIPSISOPEN)
 		{
 			stack.push(newNode);
 			level++;
 		}
+		
+		if (type == NodeType.IF)// if does not have a higher level
+			stack.push(newNode);
+		
 		if (type == NodeType.BRACKETSCLOSE)
 			if (stack.isEmpty() || stack.peek().getToken() != NodeType.BRACKETSOPEN)
 				throw new RuntimeException("Geen opentag gevonden bij de sluittag op regel:" + lineNumber);
@@ -119,7 +132,6 @@ public class Tokenizer {
 				Node oldNode = stack.pop();
 				newNode.setPartner(oldNode.positionInList);
 				oldNode.setPartner(newNode.positionInList);
-				level--;
 			}
 		if (type == NodeType.ELLIPSISCLOSED)
 			if (stack.isEmpty() || stack.peek().getToken() != NodeType.ELLIPSISOPEN)
@@ -129,7 +141,6 @@ public class Tokenizer {
 				Node oldNode = stack.pop();
 				newNode.setPartner(oldNode.positionInList);
 				oldNode.setPartner(newNode.positionInList);
-				level--;
 			}
 		if (type == NodeType.ELSE)
 			if (stack.isEmpty() || stack.peek().getToken() != NodeType.IF)
@@ -139,11 +150,10 @@ public class Tokenizer {
 				Node oldNode = stack.pop();
 				newNode.setPartner(oldNode.positionInList);
 				oldNode.setPartner(newNode.positionInList);
-				level--;
 			}
 	}
 
-	private static void isLongComment(String part) {
+	private void isLongComment(String part) {
 		// COMMENT?
 		if (part.equals("gelul"))
 			readContent = false;
@@ -151,7 +161,7 @@ public class Tokenizer {
 			readContent = true;
 	}
 
-	private static void fillHash(HashMap<String, NodeType> map) {
+	private void fillHash(HashMap<String, NodeType> map) {
 		map.put("lade", NodeType.VARIABELE);
 		map.put("==", NodeType.EQUALS);
 		map.put("print", NodeType.FUNCTION);

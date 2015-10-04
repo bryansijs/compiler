@@ -16,6 +16,7 @@ public class CompiledWhile extends AbstractCompiler{
 	private CompileList compiledStatement;
     private CompileList condition;
     private CompileList statement;
+    private CompileList compiledBodyPart;
 	
     // LinkedList constructor
     public CompiledWhile() {
@@ -42,7 +43,7 @@ public class CompiledWhile extends AbstractCompiler{
     
     public CompileList compile(Node currentToken, AbstractCompiler compiler)
     {
-        int whileLevel = currentToken.positionInList;
+        int whileLevel = currentToken.getLevel();
         
         ArrayList<NodeType> expected = new ArrayList<NodeType>();
         
@@ -56,40 +57,50 @@ public class CompiledWhile extends AbstractCompiler{
 
         for(NodeType type: expected)
         {
-//            if (currentToken.get == whileLevel)
-//            {
-//                if (currentToken.Value.Token != expectation.TokenType)
-//                {
-//                    throw new Exception(String.Format("Unexpected end of statement, expected {0}", expectation.TokenType));
-//                }
-//                else
-//                {
-//                    currentToken = currentToken.Next;
-//                }
-//            }
-//            else if (expectation.Level >= whileLevel)
-//            {
-//                if (_condition == null) // We komen eerst de conditie tegen, deze vullen we daarom eerst.
-//                {
-//                    var compiledCondition = new CompiledCondition();
-//                    compiledCondition.Compile(ref currentToken, compiler);
-//                    _condition.Add(compiledCondition.Compiled);
-//                }
-//                else
-//                {
-//                    while(currentToken.Value.Level > whileLevel) // Zolang we in de body zitten mag de factory hiermee aan de slag. Dit is niet onze zaak.
-//                    {
-//                        var compiledBodyPart = CompilerFactory.Instance.CreateCompiledStatement(currentToken.Value.Token);
-//                        compiledBodyPart.Compile(ref currentToken, compiler);
-//                        _body.Add(compiledBodyPart.Compiled);
-//                    };
-//                }
-//            }
+        	if (currentToken.getLevel() == whileLevel)
+        	{
+        		if (currentToken.getToken() != type)
+                {
+        				throw new RuntimeException("Unexpected end of statement, expected: " + type.toString());
+                }
+        		else{
+        			currentToken = currentToken.getNext();
+        		}
+        	}
+        	else
+            {
+        		if (condition.getListCount() == 2) // We komen eerst de conditie tegen, deze vullen we daarom eerst.
+        		{
+                   CompileCondition compiledCondition = new CompileCondition();
+                   condition.add(compiledCondition.compile(currentToken, null));   
+                   while(currentToken.getToken() != NodeType.ELLIPSISCLOSED) // Go until end statement
+                   {
+                	   currentToken = currentToken.getNext();
+                   }
+                }
+                else
+                {
+                	CompileListFactory factory = new CompileListFactory();
+                	CompileList body = new CompileList();
+                    while(currentToken.getLevel() > whileLevel) // Zolang we in de body zitten mag de factory hiermee aan de slag. Dit is niet onze zaak.
+                    {
+                        compiledBodyPart = factory.getCompileList(currentToken);
+                        body.add(compiledBodyPart);
+                        while(currentToken.getToken() != NodeType.SEMICOLON) // Go until end statement
+                        {
+                     	   currentToken = currentToken.getNext();
+                        }
+                        currentToken = currentToken.getNext();
+                        
+                    }
+                    statement.add(body);
+            	}
+            }
         }
         return compiledStatement;
     }
 
-
+// TODO: maybe implement tokenExpectation Class
 //	public void TokenExpectation()
 //	{
 //	    public int Level;

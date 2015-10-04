@@ -42,7 +42,20 @@ public class CompileListFactory {
 			break;
 		case BRACKETSCLOSE:
 			break;
+		case FUNCTION:
+			compList = new CompileFunction().compile(node, null);
+			break;
 		case IF:
+			Node finder = node;
+			while(finder.getToken() != NodeType.BRACKETSCLOSE)
+			{
+				finder = finder.getNext();
+			}
+			finder = finder.getNext();
+			if(finder.getToken() == NodeType.ELSE)
+				compList = new CompileIfElse().compile(node, null);
+			else
+				compList = new CompileIf().compile(node, null);
 			break;
 		case ELSE:
 			break;
