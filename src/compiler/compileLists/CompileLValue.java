@@ -22,7 +22,7 @@ public class CompileLValue extends AbstractCompiler {
         assign = new CompileList();
 
         compiledStatement.add(new DoNothing());
-        compiledStatement.insertBeforeLast(new DirectFunctionCall());
+        compiledStatement.add(new DirectFunctionCall());
         compiledStatement.add(new DoNothing());
 	}
 	
@@ -45,6 +45,18 @@ public class CompileLValue extends AbstractCompiler {
         		throw new RuntimeException("Token niet verwacht: " + type.toString());
         	}
         }
+        
+        CompileRValue rValue = new CompileRValue();
+        CompileList rValueCompiledList = rValue.compile(currentToken, compiler);
+        
+        compiledStatement.add(rValueCompiledList);
+        
+        DirectFunctionCall df = new DirectFunctionCall();
+        df.parameters.set(0, "ReturnToVariable");
+        df.parameters.set(1, currentToken.getValue().toString());
+        
+        compiledStatement.add(df);
+        
         //currentToken = currentToken.getNext(); // after assign
         NodeType currentType = currentToken.getToken();
         if(NodeType.NUMBER ==  currentType || NodeType.IDENTIFIER ==  currentType || NodeType.FUNCTION ==  currentType || NodeType.OPERATOR ==  currentType){

@@ -22,8 +22,8 @@ public class CompileIfElse extends CompileIfGeneral{
     public CompileIfElse() {
     	
     	compiledStatement = new CompileList();
-        condition = new CompileList();
-        statement = new CompileList();
+        condition = new CompileList(true);
+        statement = new CompileList(true);
 
         ConditionalJump conditionalJumpNode = new ConditionalJump();
         

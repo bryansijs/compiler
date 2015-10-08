@@ -1,5 +1,8 @@
 package compiler.nodes;
 
-public abstract class AbstractFunctionCall extends Action{
+import java.util.List;
 
+
+public abstract class AbstractFunctionCall extends Action{
+	public List<String> parameters;
 }

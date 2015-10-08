@@ -18,23 +18,25 @@ public class CompileFunction extends AbstractCompiler{
     public CompileFunction() {
     	
 		compiledStatement = new CompileList();
-        condition = new CompileList();
-        statement = new CompileList();
-        statement2 = new CompileList();
+        condition = new CompileList(true);
+        statement = new CompileList(true);
+        statement2 = new CompileList(true);
         
-        Action jumpNode = new Jump();
+        Jump jumpNode = new Jump();
         ConditionalJump conditionalJumpNode = new ConditionalJump();
         DoNothing elseNothing = new DoNothing();
         
+        compiledStatement.add(new DoNothing());
         compiledStatement.add(condition);
-        compiledStatement.insertBeforeLast(conditionalJumpNode);
+        compiledStatement.add(conditionalJumpNode);
         compiledStatement.add(new DoNothing());
         compiledStatement.add(statement);
-        compiledStatement.insertBeforeLast(jumpNode);
-        compiledStatement.insertBeforeLast(elseNothing);
+        compiledStatement.add(jumpNode);
+        compiledStatement.add(elseNothing);
         compiledStatement.add(statement2);
+        compiledStatement.add(new DoNothing());
 
-        jumpNode.setNext(compiledStatement.getHead());
+        jumpNode.setJumpToNode(compiledStatement.getHead());
         conditionalJumpNode.setNextTrue(conditionalJumpNode.getNext());
         conditionalJumpNode.setNextFalse(elseNothing);
 	}

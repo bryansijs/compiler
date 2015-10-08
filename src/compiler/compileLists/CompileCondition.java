@@ -14,8 +14,8 @@ public class CompileCondition extends AbstractCompiler {
 	
     public CompileCondition() {
     	
-		compiledStatement = new CompileList();
-        condition = new CompileList();
+		compiledStatement = new CompileList(true);
+        condition = new CompileList(true);
 
         ConditionalJump conditionalJumpNode = new ConditionalJump();
         Action jumpBackNode = new Jump();
@@ -32,7 +32,7 @@ public class CompileCondition extends AbstractCompiler {
 	@Override
 	public CompileList compile(Node currentToken, AbstractCompiler compiler) {
 		condition.insertBeforeLast(new ConditionalJump());
-		System.out.println("CompileCondition compile value nog toevoegen");
+		System.out.println("Set True or false on return Value");
 		return compiledStatement;
 	}
 

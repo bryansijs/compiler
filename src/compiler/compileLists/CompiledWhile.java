@@ -22,11 +22,11 @@ public class CompiledWhile extends AbstractCompiler{
     public CompiledWhile() {
     	
 		compiledStatement = new CompileList();
-        condition = new CompileList();
-        statement = new CompileList();
+        condition = new CompileList(true);
+        statement = new CompileList(true);
 
         ConditionalJump conditionalJumpNode = new ConditionalJump();
-        Action jumpBackNode = new Jump();
+        Jump jumpBackNode = new Jump();
 
         compiledStatement.add(new DoNothing());
         compiledStatement.add(condition);
@@ -36,7 +36,7 @@ public class CompiledWhile extends AbstractCompiler{
         compiledStatement.add(new DoNothing());
 
 
-        jumpBackNode.setNext(compiledStatement.getFirst()); // JumpToNode is een extra property ten opzichte van andere nodes.
+        jumpBackNode.setJumpToNode(compiledStatement.getFirst()); // JumpToNode is een extra property ten opzichte van andere nodes.
         conditionalJumpNode.setNextTrue(statement.getFirst());// NextOnTrue en NextOnFalse zijn extra properties ten opzichte van andere nodes.
         conditionalJumpNode.setNextFalse(compiledStatement.getHead());
 	}
@@ -99,17 +99,4 @@ public class CompiledWhile extends AbstractCompiler{
         }
         return compiledStatement;
     }
-
-// TODO: maybe implement tokenExpectation Class
-//	public void TokenExpectation()
-//	{
-//	    public int Level;
-//	    public TokenType TokenType;
-//	
-//	    public TokenExpectation(int level, TokenType tokenType)
-//	    {
-//	        Level = level;
-//	        TokenType = tokenType;
-//	    }
-//	}
 }

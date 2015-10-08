@@ -3,6 +3,7 @@ package compiler;
 import compiler.nodes.Action;
 import compiler.tokenizer.Node;
 import compiler.tokenizer.linked_list;
+import compiler.virtualMachine.VirtualMachine;
 
 public class Main {
 	
@@ -18,6 +19,8 @@ public class Main {
 		CompileList compileList = compiler.getCompiledListFromTokenList(tokenList);
 		printCompilerList(compileList);
 		// Compiled list to virtual machine
+		
+		VirtualMachine vm = new VirtualMachine();
 	}
 	
 	public static void printTokenizer(linked_list tokenList){

@@ -10,43 +10,77 @@ public class CompileList {
 
 	// LinkedList constructor
 	public CompileList() {
-		first = new DoNothing(null, null);
-		head = new DoNothing(null, first);
-		first.setNext(head);
-		
-		listCount += 2;
 	}
 	
-	public void insertBefore(Action action, Action before ){
-			Action oldPrev = before.getPrevious();
-			before.setPrevious(action);
-			action.setNext(before);
-			action.setPrevious(oldPrev);
-			oldPrev.setNext(action);
+	public CompileList(boolean vullen)
+	{
+		if(vullen){
+			this.head = new DoNothing(null,null);
+			this.first = new DoNothing(head, null);
+			head.setPrevious(first);
+			listCount = 2;
+		}
 	}
 	
 	public void insertBeforeLast(Action action){
-		Action end = head;
-		Action oldPrev = end.getPrevious();
-		end.setPrevious(action);
-		action.setNext(end);
-		action.setPrevious(oldPrev);
-		oldPrev.setNext(action);
+		if(first == null)
+		{
+			// eerste item in list
+			first = action;
+			head = action;
+			listCount++;
+		}
+		else if(listCount < 2)
+		{
+			// tweede item in list
+			head = action;
+			first.setNext(action);
+			head.setPrevious(first);
+			listCount++;
+		}
+		else
+		{
+			// Al meerdere items in list
+			Action oldPrev = head.getPrevious();
+			head.setPrevious(action);
+			action.setNext(head);
+			action.setPrevious(oldPrev);
+			oldPrev.setNext(action);
+			listCount++;
+		}
 	}
 
 	public void add(Action token) {
-		//Not the first.
-		head.setNext(token);//Next
-		token.setPrevious(head);
-		head = token;
-		listCount++;	
+		if(first == null){
+			first = token;
+			head = token;
+			listCount++;
+		}
+		else
+		{
+			//Not the first.
+			head.setNext(token);//Next
+			token.setPrevious(head);
+			head = token;
+			listCount++;
+		}
 	}
 	
 	public void add(CompileList list){
+		if(first == null)
+		{
+			first = list.first;
+			head = list.head;
+			listCount = list.listCount;
+		}
+		else
+		{
+		head = list.head;
 		list.first.setPrevious(this.head);
 		this.head.setNext(list.first);
-		listCount =  this.getListCount() + list.getListCount();
-		head = list.head;
+		listCount =  listCount + list.getListCount();
+		
+		}
 	}
 	
 	public Action getHead(){
