@@ -47,7 +47,7 @@ public class CompileListFactory {
 			break;
 		case IF:
 			Node finder = node;
-			while(finder.getToken() != NodeType.BRACKETSCLOSE)//TODO & not null
+			while(finder.getToken() != NodeType.BRACKETSCLOSE && finder != null)//TODO & not null
 			{
 				finder = finder.getNext();
 			}

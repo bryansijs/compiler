@@ -28,7 +28,6 @@ public class Compiler {
 		boolean endText = false;
 		do{
 			sublist = factory.getCompileList(node, this);
-			System.out.println(sublist.getListCount());
 			list.add(sublist);
 			endText = skipToNextItem();
 		}

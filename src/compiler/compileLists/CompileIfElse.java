@@ -15,7 +15,9 @@ public class CompileIfElse extends CompileIfGeneral{
 	private CompileList compiledStatement;
     private CompileList condition;
     private CompileList statement;
+    private CompileList statement2;
     private CompileList compiledBodyPart;
+    private boolean inElse;
     
 	
     // LinkedList constructor
@@ -24,18 +26,25 @@ public class CompileIfElse extends CompileIfGeneral{
     	compiledStatement = new CompileList();
         condition = new CompileList(true);
         statement = new CompileList(true);
+        statement2 = new CompileList(true);
+        inElse = false;
 
         ConditionalJump conditionalJumpNode = new ConditionalJump();
+        Jump jump = new Jump();
         
         compiledStatement.add(new DoNothing());
         compiledStatement.add(condition);
         compiledStatement.add(conditionalJumpNode);
         compiledStatement.add(new DoNothing());
         compiledStatement.add(statement);
+        compiledStatement.add(jump);
+        compiledStatement.add(statement2);
         compiledStatement.add(new DoNothing());
+        
 
         conditionalJumpNode.setNextTrue(conditionalJumpNode.getNext());
-        conditionalJumpNode.setNextFalse(compiledStatement.getHead());
+        conditionalJumpNode.setNextFalse(statement2.getFirst());
+        jump.setJumpToNode(compiledStatement.getHead());
 	}
     
     public CompileList compile(Node currentToken, compiler.Compiler compiler) {
@@ -50,6 +59,10 @@ public class CompileIfElse extends CompileIfGeneral{
         expected.add(NodeType.BRACKETSOPEN);
         expected.add(NodeType.ANY);
         expected.add(NodeType.BRACKETSCLOSE);
+        expected.add(NodeType.ELSE);
+        expected.add(NodeType.BRACKETSOPEN);
+        expected.add(NodeType.ANY);
+        expected.add(NodeType.BRACKETSCLOSE);
         
         for(NodeType type: expected)
         {
@@ -60,6 +73,10 @@ public class CompileIfElse extends CompileIfGeneral{
         				throw new RuntimeException("Unexpected end of statement, expected: " + type.toString());
                 }
         		else{
+        			if(currentToken.getToken() == NodeType.ELSE)
+        			{
+        				inElse = true;
+        			}
         			currentToken = currentToken.getNext();
         		}
         	}
@@ -68,7 +85,7 @@ public class CompileIfElse extends CompileIfGeneral{
         		if (condition.getListCount() == 2) // We komen eerst de conditie tegen, deze vullen we daarom eerst.
         		{
                    CompileCondition compiledCondition = new CompileCondition();
-                   condition.add(compiledCondition.compile(currentToken, null));
+                   condition.insertListBeforeLast(compiledCondition.compile(currentToken, compiler));
                    
                    while(currentToken.getToken() != NodeType.ELLIPSISCLOSED) // Go until end statement
                    {
@@ -78,11 +95,15 @@ public class CompileIfElse extends CompileIfGeneral{
                 else
                 { // Body
                 	CompileListFactory factory = new CompileListFactory();
-                	CompileList body = new CompileList();
                     while(currentToken.getLevel() > whileLevel) // Zolang we in de body zitten mag de factory hiermee aan de slag. Dit is niet onze zaak.
                     {
                         compiledBodyPart = factory.getCompileList(currentToken,compiler);
-                        body.add(compiledBodyPart);
+                        
+                        if(inElse)
+                        	statement2.insertListBeforeLast(compiledBodyPart);
+                        else
+                        	statement.insertListBeforeLast(compiledBodyPart);
+                        
                         while(currentToken.getToken() != NodeType.SEMICOLON) // Go until end statement
                         {
                      	   currentToken = currentToken.getNext();

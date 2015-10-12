@@ -72,7 +72,8 @@ public class CompiledWhile extends AbstractCompiler{
         		if (condition.getListCount() == 2) // We komen eerst de conditie tegen, deze vullen we daarom eerst.
         		{
                    CompileCondition compiledCondition = new CompileCondition();
-                   condition.add(compiledCondition.compile(currentToken, null));   // dn->dn-> Rvalue TODO: clean up
+                   CompileList con = compiledCondition.compile(currentToken, compiler);
+                   condition.insertListBeforeLast(con);   // dn->dn-> Rvalue TODO: clean up
                    while(currentToken.getToken() != NodeType.ELLIPSISCLOSED) // Go until end statement
                    {
                 	   currentToken = currentToken.getNext();
@@ -86,7 +87,7 @@ public class CompiledWhile extends AbstractCompiler{
                     while(currentToken.getLevel() > whileLevel) // Zolang we in de body zitten mag de factory hiermee aan de slag. Dit is niet onze zaak.
                     {
                         compiledBodyPart = factory.getCompileList(currentToken,compiler);
-                        body.add(compiledBodyPart);
+                        body.insertListBeforeLast(compiledBodyPart);
                         while(currentToken.getToken() != NodeType.SEMICOLON) // Go until end statement
                         {
                      	   currentToken = currentToken.getNext();
@@ -94,7 +95,7 @@ public class CompiledWhile extends AbstractCompiler{
                         currentToken = currentToken.getNext();
                         
                     }
-                    statement.add(body);
+                    statement.insertListBeforeLast((body));
             	}
             }
         }

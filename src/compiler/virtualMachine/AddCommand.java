@@ -14,7 +14,7 @@ public class AddCommand extends BaseCommand {
 				// Param2 -> "x"
 				// Param3 -> "y"
 		
-		vm.returnValue = vm.variables.get(node.parameters.get(1)) + vm.variables.get(node.parameters.get(2));
+		vm.returnValue = Integer.toString(Integer.parseInt(vm.variables.get(node.parameters.get(1))) + Integer.parseInt(vm.variables.get(node.parameters.get(2))));
 		//vm.returnValue = vm.variables.get("x") + vm.variables.get("y");
 	}
 

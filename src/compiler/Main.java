@@ -23,8 +23,9 @@ public class Main {
 		// Compiled list to virtual machine
 		
 		VirtualMachine vm = new VirtualMachine();
-		vm.Run(compileList);
 		//Run Machine!
+		vm.Run(compileList);
+		
 	}
 	
 	public static void printTokenizer(linked_list tokenList){

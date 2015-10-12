@@ -49,6 +49,26 @@ public class CompileList {
 			listCount++;
 		}
 	}
+	
+	public void insertListBeforeLast(CompileList list){
+		
+		if(first == null)
+		{
+			first = list.first;
+			head = list.head;
+			listCount = list.listCount;
+		}
+		else
+		{
+			Action oldPrev = head.getPrevious();
+			head.setPrevious(list.head);
+			oldPrev.setNext(list.first);
+			list.first.setPrevious(oldPrev);
+			list.head.setNext(head);
+			listCount = listCount + list.listCount;
+			
+		}
+	}
 
 	public void add(Action token) {
 		if(first == null){
