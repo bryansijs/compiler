@@ -1,5 +1,7 @@
 package compiler.nodes;
 
+import compiler.virtualMachine.Visitor.NodeVisitor;
+
 public class ConditionalJump extends Action {
 	
 	private Action nextTrue;
@@ -28,5 +30,10 @@ public class ConditionalJump extends Action {
 
 	public void setNextFalse(Action nextFalse) {
 		this.nextFalse = nextFalse;
+	}
+
+	@Override
+	public void Accept(NodeVisitor visitor) {
+		visitor.visit(this);
 	}
 }

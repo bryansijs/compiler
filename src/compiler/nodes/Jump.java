@@ -1,5 +1,7 @@
 package compiler.nodes;
 
+import compiler.virtualMachine.Visitor.NodeVisitor;
+
 
 public class Jump extends Action{
 	public Action JumpToNode;
@@ -15,5 +17,10 @@ public class Jump extends Action{
 	
 	public void setJumpToNode( Action action){
 		this.JumpToNode = action;
+	}
+
+	@Override
+	public void Accept(NodeVisitor visitor) {
+		visitor.visit(this);
 	}
 }

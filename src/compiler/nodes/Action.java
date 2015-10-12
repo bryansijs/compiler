@@ -1,8 +1,11 @@
 package compiler.nodes;
+import compiler.virtualMachine.Visitor.*;
 
 public abstract class Action {
 	private Action next;
 	private Action previous;
+	
+	public abstract void Accept( NodeVisitor visitor);
 	
 	public Action(){
 		

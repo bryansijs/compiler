@@ -7,12 +7,13 @@ import compiler.nodes.AbstractFunctionCall;
 import compiler.nodes.Action;
 import compiler.nodes.ConditionalJump;
 import compiler.nodes.Jump;
+import compiler.virtualMachine.Visitor.NodeVisitor;
 
 public class VirtualMachine {
 	
 	public String returnValue;
 	public HashMap<String, String> variables;
-	private HashMap<String, BaseCommand> commands;
+	public HashMap<String, BaseCommand> commands;
 	
 	
 	public VirtualMachine()
@@ -31,34 +32,13 @@ public class VirtualMachine {
 	public void Run(CompileList list)
 	{
 		Action current = list.getFirst();
+		NodeVisitor visitor = new NodeVisitor(this);
+		
 		while(current != null)
 		{
 			// command om iets uit te voeren
-			if(current instanceof AbstractFunctionCall)
-			{
-				AbstractFunctionCall func = (AbstractFunctionCall) current;
-				commands.get(func.parameters.get(0)).Execute(func, this);
-			}
-			if(current instanceof Jump){
-				current = ((Jump) current).JumpToNode;
-			}
-			else if(current instanceof ConditionalJump)
-			{
-				if(this.returnValue.equals("true")){
-					current = ((ConditionalJump) current).getNextTrue();
-				}
-				else if(this.returnValue.equals("false")){
-					current = ((ConditionalJump) current).getNextFalse();
-				}
-				else{
-					throw new RuntimeException("expected true or false, found : " + returnValue);
-				}
-			}else{
-				current = current.getNext();
-			}
-			
-			// get new current TODO: visitorPattern
-			
+			current.Accept(visitor);
+			current = visitor.getNode();
 		}
 	}
 }

@@ -2,6 +2,8 @@ package compiler.nodes;
 
 import java.util.ArrayList;
 
+import compiler.virtualMachine.Visitor.NodeVisitor;
+
 
 
 public class DirectFunctionCall extends AbstractFunctionCall{
@@ -27,5 +29,10 @@ public class DirectFunctionCall extends AbstractFunctionCall{
 
 	public void setInput(int input) {
 		this.input = input;
+	}
+
+	@Override
+	public void Accept(NodeVisitor visitor) {
+		visitor.visit(this);
 	}
 }
