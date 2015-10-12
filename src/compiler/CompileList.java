@@ -75,11 +75,11 @@ public class CompileList {
 		}
 		else
 		{
-		head = list.head;
-		list.first.setPrevious(this.head);
-		this.head.setNext(list.first);
-		listCount =  listCount + list.getListCount();
-		
+			head.setNext(list.getFirst());
+			list.first.setPrevious(this.head);
+			this.head.setNext(list.first);
+			listCount =  listCount + list.getListCount();
+			head = list.head;
 		}
 	}
 	

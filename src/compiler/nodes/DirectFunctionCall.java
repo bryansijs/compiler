@@ -1,5 +1,7 @@
 package compiler.nodes;
 
+import java.util.ArrayList;
+
 
 
 public class DirectFunctionCall extends AbstractFunctionCall{
@@ -8,6 +10,7 @@ public class DirectFunctionCall extends AbstractFunctionCall{
 	
 	public DirectFunctionCall() {
 		// TODO Auto-generated constructor stub
+		parameters = new ArrayList<String>();
 	}
 
 	public ActionType getActionType() {

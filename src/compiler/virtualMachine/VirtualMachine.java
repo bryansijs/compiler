@@ -7,20 +7,19 @@ import compiler.nodes.AbstractFunctionCall;
 import compiler.nodes.Action;
 
 public class VirtualMachine {
+	
 	public String returnValue;
 	public HashMap<String, String> variables;
 	private HashMap<String, BaseCommand> commands;
-	private int lastAssignedVariableName = 0;
 	
-	public String getNextVariableName(){
-		return "$" + lastAssignedVariableName++;
-	}
 	
 	public VirtualMachine()
 	{
 		commands = new HashMap<String, BaseCommand>();
 		commands.put("ADD", new AddCommand());
 		commands.put("PRINT", new PrintCommand());
+		commands.put("ConstToReturn", new constToReturnCommand());
+		variables = new HashMap<String, String>();
 	}
 	
 	public void Run(CompileList list)
@@ -31,7 +30,8 @@ public class VirtualMachine {
 			// command om iets uit te voeren
 			if(current instanceof AbstractFunctionCall)
 			{
-				commands.get(current.parameters.get(0)).execute(current, this);
+				AbstractFunctionCall func = (AbstractFunctionCall) current;
+				commands.get(func.parameters.get(0)).Execute(func, this);
 			}
 			
 			// get new current;

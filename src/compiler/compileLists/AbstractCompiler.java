@@ -35,5 +35,5 @@ public abstract class AbstractCompiler {
 		this.last = last;
 	}
 	
-	public abstract CompileList compile(Node currentToken, AbstractCompiler compiler);
+	public abstract CompileList compile(Node currentToken, compiler.Compiler compiler);
 }

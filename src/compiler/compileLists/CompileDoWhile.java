@@ -34,7 +34,7 @@ public class CompileDoWhile extends AbstractCompiler {
 	}
 
 	@Override
-	public CompileList compile(Node currentToken, AbstractCompiler compiler) {
+	public CompileList compile(Node currentToken, compiler.Compiler compiler) {
 		// TODO Auto-generated method stub
 		return null;
 	}

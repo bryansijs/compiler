@@ -38,7 +38,7 @@ public class CompileIfElse extends CompileIfGeneral{
         conditionalJumpNode.setNextFalse(compiledStatement.getHead());
 	}
     
-    public CompileList compile(Node currentToken, AbstractCompiler compiler) {
+    public CompileList compile(Node currentToken, compiler.Compiler compiler) {
     	int whileLevel = currentToken.getLevel();
     	
     	ArrayList<NodeType> expected = new ArrayList<NodeType>();
@@ -81,7 +81,7 @@ public class CompileIfElse extends CompileIfGeneral{
                 	CompileList body = new CompileList();
                     while(currentToken.getLevel() > whileLevel) // Zolang we in de body zitten mag de factory hiermee aan de slag. Dit is niet onze zaak.
                     {
-                        compiledBodyPart = factory.getCompileList(currentToken);
+                        compiledBodyPart = factory.getCompileList(currentToken,compiler);
                         body.add(compiledBodyPart);
                         while(currentToken.getToken() != NodeType.SEMICOLON) // Go until end statement
                         {

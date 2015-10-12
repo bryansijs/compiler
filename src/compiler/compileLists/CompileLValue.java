@@ -3,6 +3,7 @@ package compiler.compileLists;
 import java.util.ArrayList;
 
 import compiler.CompileList;
+import compiler.Compiler;
 import compiler.nodes.AbstractFunctionCall;
 import compiler.nodes.ConditionalJump;
 import compiler.nodes.DirectFunctionCall;
@@ -13,27 +14,27 @@ import compiler.tokenizer.NodeType;
 public class CompileLValue extends AbstractCompiler {
 	
 	private CompileList compiledStatement;
-    private CompileList assign;
+    private String identifier;
 	
     // LinkedList constructor
     public CompileLValue() {
     	
 		compiledStatement = new CompileList();
-        assign = new CompileList();
-
-        compiledStatement.add(new DoNothing());
-        compiledStatement.add(new DirectFunctionCall());
-        compiledStatement.add(new DoNothing());
+		compiledStatement.add(new DoNothing());
 	}
 	
 	@Override
-	public CompileList compile(Node currentToken, AbstractCompiler compiler) {
+	public CompileList compile(Node currentToken, compiler.Compiler compiler) {
         
         ArrayList<NodeType> expected = new ArrayList<NodeType>();
         
         expected.add(NodeType.VARIABELE);
         expected.add(NodeType.IDENTIFIER);
         expected.add(NodeType.ASSIGN); // Condition
+        
+        if(currentToken.getNext().getToken() == NodeType.IDENTIFIER){
+        	identifier = currentToken.getNext().getValue().toString();
+        }
         
         for(NodeType type: expected)
         {
@@ -52,8 +53,8 @@ public class CompileLValue extends AbstractCompiler {
         compiledStatement.add(rValueCompiledList);
         
         DirectFunctionCall df = new DirectFunctionCall();
-        df.parameters.set(0, "ReturnToVariable");
-        df.parameters.set(1, currentToken.getValue().toString());
+        df.parameters.add(0, "ReturnToVariable");
+        df.parameters.add(1, this.identifier);
         
         compiledStatement.add(df);
         
@@ -66,7 +67,7 @@ public class CompileLValue extends AbstractCompiler {
     	{
     		throw new RuntimeException("Token niet verwacht: " + currentType.toString());
     	}
-        
+        compiledStatement.add(new DoNothing());
         return compiledStatement;
 	}
 

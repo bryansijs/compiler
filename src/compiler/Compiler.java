@@ -10,9 +10,14 @@ public class Compiler {
 	private CompileList list;
 	private CompileList sublist;
 	private Node node;
+	private int lastAssignedVariableName = 0;
 
 	public Compiler() {
 		list = new CompileList();
+	}
+	
+	public String getNextVariableName(){
+		return "$" + lastAssignedVariableName++;
 	}
 
 	public CompileList getCompiledListFromTokenList(linked_list tokenList){
@@ -22,7 +27,8 @@ public class Compiler {
 		
 		boolean endText = false;
 		do{
-			sublist = factory.getCompileList(node);
+			sublist = factory.getCompileList(node, this);
+			System.out.println(sublist.getListCount());
 			list.add(sublist);
 			endText = skipToNextItem();
 		}

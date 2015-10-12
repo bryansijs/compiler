@@ -1,6 +1,8 @@
 package compiler;
 
+import compiler.nodes.AbstractFunctionCall;
 import compiler.nodes.Action;
+import compiler.nodes.DirectFunctionCall;
 import compiler.tokenizer.Node;
 import compiler.tokenizer.linked_list;
 import compiler.virtualMachine.VirtualMachine;
@@ -21,6 +23,8 @@ public class Main {
 		// Compiled list to virtual machine
 		
 		VirtualMachine vm = new VirtualMachine();
+		vm.Run(compileList);
+		//Run Machine!
 	}
 	
 	public static void printTokenizer(linked_list tokenList){
@@ -38,6 +42,8 @@ public class Main {
 			System.out.println(action.getClass());
 			action = action.getNext();
 		}
+		
+		System.out.println("Total: "+ compileList.getListCount());
 		
 	}
 }

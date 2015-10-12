@@ -1,8 +1,8 @@
 package compiler.nodes;
 
-import java.util.List;
+import java.util.ArrayList;
 
 
 public abstract class AbstractFunctionCall extends Action{
-	public List<String> parameters;
+	public ArrayList<String> parameters;
 }
